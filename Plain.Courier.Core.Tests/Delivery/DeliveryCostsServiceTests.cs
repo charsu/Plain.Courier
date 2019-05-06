@@ -14,11 +14,6 @@ namespace Plain.Courier.Core.Tests.Delivery {
       private AutoMock GetMock()
          => AutoMock.GetLoose();
 
-
-      [SetUp]
-      public void Setup() {
-      }
-
       [Test]
       public void DeliveryForOrder_WithSimpleSetOfRules_OK() {
          var orders = GetOrderWithOneOfEach();
