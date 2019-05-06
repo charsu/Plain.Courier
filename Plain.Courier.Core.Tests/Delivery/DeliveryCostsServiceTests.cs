@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Autofac.Extras.Moq;
 using NUnit.Framework;
+using Plain.Courier.Core.Delivery;
 using Plain.Courier.Core.Delivery.Models;
 using Plain.Courier.Core.Delivery.Services;
+using Plain.Courier.Core.Delivery.Services.Rules;
 using static Plain.Courier.Core.Tests.Delivery.DeliveryCostsServiceHelper;
 
 namespace Plain.Courier.Core.Tests.Delivery {
@@ -22,7 +24,10 @@ namespace Plain.Courier.Core.Tests.Delivery {
       public void DeliveryForOrder_OK() {
          var orders = GetOrdersSetup1();
 
-         var service = GetMock().Create<DeliveryCostsService>();
+         var mock = GetMock();
+         var service = mock
+               .SetupRules(CreateSimpleParcelRuleSet(mock))
+            .Create<DeliveryCostsService>();
 
          var result = service.ComputeCost(orders);
 
@@ -41,5 +46,15 @@ namespace Plain.Courier.Core.Tests.Delivery {
          }
       }
      };
+
+      public static List<IParcelDeliveryCostRule> CreateSimpleParcelRuleSet(AutoMock mock)
+         => new List<IParcelDeliveryCostRule>() { mock.Create<SimpleParcelDeliveryCostRule>() };
+
+      public static AutoMock SetupRules(this AutoMock mock, List<IParcelDeliveryCostRule> ruleSets = null) {
+         if (ruleSets != null) {
+            mock.Provide((IEnumerable<IParcelDeliveryCostRule>)ruleSets);
+         }
+         return mock;
+      }
    }
 }
