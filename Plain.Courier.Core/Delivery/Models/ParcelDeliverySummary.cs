@@ -7,10 +7,11 @@ namespace Plain.Courier.Core.Delivery.Models {
    public class ParcelDeliverySummary {
       public decimal? Price { get; set; }
       public decimal? PriceFactor { get; set; }
+      public decimal Discount { get; set; } = 0;
       public bool? IsSpeedy { get; set; }
 
       public ParcelSize? ParcelSize { get; set; }
-      public decimal Total { get => (Price ?? 0) * (PriceFactor ?? 1); }
+      public decimal Total { get => ((Price ?? 0) - Discount) * (PriceFactor ?? 1); }
    }
 
    public static class ParcelDeliverySummaryHelper {
