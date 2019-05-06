@@ -7,5 +7,7 @@ namespace Plain.Courier.Core.Delivery.Models {
       public int Length { get; set; }
       public int Width { get; set; }
       public int Height { get; set; }
+
+      public List<int> Dimensions => new List<int>() { Length, Width, Height };
    }
 }
