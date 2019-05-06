@@ -16,7 +16,7 @@ namespace Plain.Courier.Core.Delivery.Models {
    public static class ParcelDeliverySummaryHelper {
       public static ParcelDeliverySummary Update(this ParcelDeliverySummary parcelDeliverySummary, ParcelDeliverySummary right) {
          if (right.Price.HasValue) {
-            parcelDeliverySummary.Price = right.Price;
+            parcelDeliverySummary.Price = (parcelDeliverySummary.Price ?? 0) + right.Price;
          }
          if (right.PriceFactor.HasValue) {
             parcelDeliverySummary.PriceFactor = right.PriceFactor;
