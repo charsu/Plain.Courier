@@ -12,7 +12,8 @@ namespace Plain.Courier.Core.Tests.Delivery {
    public class DeliveryCostsServiceTests {
 
       private AutoMock GetMock()
-         => AutoMock.GetLoose();
+         => AutoMock.GetLoose()
+            .SetupDiscountService();
 
       [Test]
       public void DeliveryForOrder_WithSimpleSetOfRules_OK() {

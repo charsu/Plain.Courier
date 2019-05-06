@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Moq;
 using Plain.Courier.Core.Delivery;
 using Plain.Courier.Core.Delivery.Models;
+using Plain.Courier.Core.Delivery.Services;
 using Plain.Courier.Core.Delivery.Services.Rules;
 
 namespace Plain.Courier.Core.Tests.Delivery {
@@ -94,6 +96,15 @@ namespace Plain.Courier.Core.Tests.Delivery {
             mock.Provide((IEnumerable<IParcelDeliveryCostRule>)ruleSets);
          }
          return mock;
+      }
+
+      public static AutoMock SetupDiscountService(this AutoMock autoMock) {
+         //setup pass through
+         var m = autoMock.Mock<IDiscountParcelDeliveryService>();
+         m.Setup(s => s.ComputeDiscounts(It.IsAny<List<ParcelDeliverySummary>>()))
+            .Returns<List<ParcelDeliverySummary>>((list) => list);
+
+         return autoMock;
       }
    }
 }
