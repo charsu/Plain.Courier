@@ -7,6 +7,7 @@ namespace Plain.Courier.Core.Delivery.Models {
    public class ParcelDeliverySummary {
       public decimal? Price { get; set; }
       public decimal? PriceFactor { get; set; }
+      public decimal Discount { get; set; } = 0;
       public bool? IsSpeedy { get; set; }
 
       public ParcelSize? ParcelSize { get; set; }

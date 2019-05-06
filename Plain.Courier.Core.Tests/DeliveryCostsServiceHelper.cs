@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Autofac.Extras.Moq;
 using Plain.Courier.Core.Delivery;
 using Plain.Courier.Core.Delivery.Models;
@@ -59,6 +60,18 @@ namespace Plain.Courier.Core.Tests.Delivery {
             }
          }
      };
+
+      public static List<ParcelDeliverySummary> GetSmallParcelsSummariesForDiscount()
+         => Enumerable.Range(0, 10).Select(x => new ParcelDeliverySummary() {
+            ParcelSize = Core.Delivery.Constants.ParcelSize.Small,
+            Price = 10 + x
+         }).ToList();
+
+      public static List<ParcelDeliverySummary> GetMediumParcelsSummariesForDiscount()
+         => Enumerable.Range(0, 10).Select(x => new ParcelDeliverySummary() {
+            ParcelSize = Core.Delivery.Constants.ParcelSize.Medium,
+            Price = 10 + x
+         }).ToList();
 
       public static List<IParcelDeliveryCostRule> CreateSimpleParcelRuleSet(AutoMock mock)
          => new List<IParcelDeliveryCostRule>() { mock.Create<SimpleParcelDeliveryCostRule>() };
