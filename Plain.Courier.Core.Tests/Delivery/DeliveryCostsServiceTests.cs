@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Autofac.Extras.Moq;
 using NUnit.Framework;
+using Plain.Courier.Core.Delivery.Constants;
 using Plain.Courier.Core.Delivery.Models;
 using Plain.Courier.Core.Delivery.Services;
 using static Plain.Courier.Core.Tests.Delivery.DeliveryCostsServiceHelper;
@@ -13,7 +14,7 @@ namespace Plain.Courier.Core.Tests.Delivery {
 
       private AutoMock GetMock()
          => AutoMock.GetLoose()
-            .SetupDiscountService();
+            .SetupFakeDiscountService();
 
       [Test]
       public void DeliveryForOrder_WithSimpleSetOfRules_OK() {
@@ -28,7 +29,7 @@ namespace Plain.Courier.Core.Tests.Delivery {
 
          // small + med + large + xl ( 3+8+15+25 = 51) 
          Assert.IsTrue(result.Total == 51);
-         Assert.IsTrue(result.ParcelSummary.Count == 4);
+         Assert.IsTrue(result.ParcelSummaries.Count == 4);
       }
 
       [Test]
@@ -47,7 +48,7 @@ namespace Plain.Courier.Core.Tests.Delivery {
          // normal order: small + med + large + xl ( 3+8+15+25 = 51)
          // spedy order: small + med + large + xl ( 2* (3+8+15+25) = 2*51 = 102)
          Assert.IsTrue(result.Total == 153);
-         Assert.IsTrue(result.ParcelSummary.Count == 8);
+         Assert.IsTrue(result.ParcelSummaries.Count == 8);
          Assert.IsTrue(result.SpeedyDeliveries.Count == 4);
       }
 
@@ -69,6 +70,29 @@ namespace Plain.Courier.Core.Tests.Delivery {
          // total 101 + 18 = 119 
          // one normal setup + 2x (as the 2n one is speedy) => 119*3;
          Assert.IsTrue(result.Total == 119 * 3);
+      }
+
+      [Test]
+      public void DeliveryForOrders_WithDiscounts_OK() {
+         var orders = new List<Order>() {
+            new Order() {
+               Parcels = Enumerable.Range(0,20).Select(x=> new Parcel(){
+                  Length = 1 + x
+               }).ToList()
+            }
+         };
+
+         var mock = GetMock();
+         var service = mock
+               .SetupRules(CreateWeigthParcelRuleSet(mock))
+               .SetupDiscountService()
+               .Create<DeliveryCostsService>();
+
+         var result = service.ComputeCost(orders);
+
+         Assert.AreEqual(6, result.DiscountedDeliveries.Count(x => x.ParcelSize == ParcelSize.Small));
+         Assert.AreEqual(3, result.DiscountedDeliveries.Count(x => x.ParcelSize == ParcelSize.Medium));
+         Assert.AreEqual(result.Total, result.ParcelSummaries.Sum(x => x.Total));
       }
    }
 }

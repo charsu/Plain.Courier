@@ -11,7 +11,7 @@ namespace Plain.Courier.Core.Delivery.Models {
       public bool? IsSpeedy { get; set; }
 
       public ParcelSize? ParcelSize { get; set; }
-      public decimal Total { get => (Price ?? 0) * (PriceFactor ?? 1); }
+      public decimal Total { get => ((Price ?? 0) - Discount) * (PriceFactor ?? 1); }
    }
 
    public static class ParcelDeliverySummaryHelper {
