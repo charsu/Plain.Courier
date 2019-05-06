@@ -52,6 +52,7 @@ namespace Plain.Courier.Core.Tests.Delivery {
          // spedy order: small + med + large + xl ( 2* (3+8+15+25) = 2*51 = 102)
          Assert.IsTrue(result.Total == 153);
          Assert.IsTrue(result.ParcelSummary.Count == 8);
+         Assert.IsTrue(result.SpeedyDeliveries.Count == 4);
       }
    }
 }

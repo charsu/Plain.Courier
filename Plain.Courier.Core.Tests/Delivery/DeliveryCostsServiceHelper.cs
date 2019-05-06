@@ -35,7 +35,10 @@ namespace Plain.Courier.Core.Tests.Delivery {
          => new List<IParcelDeliveryCostRule>() { mock.Create<SimpleParcelDeliveryCostRule>() };
 
       public static List<IParcelDeliveryCostRule> CreateSpeedyParcelRuleSet(AutoMock mock)
-         => new List<IParcelDeliveryCostRule>() { mock.Create<SpeedyParcelDeliveryCostRule>() };
+         => new List<IParcelDeliveryCostRule>() {
+            mock.Create<SimpleParcelDeliveryCostRule>(),
+            mock.Create<SpeedyParcelDeliveryCostRule>()
+         };
 
       public static AutoMock SetupRules(this AutoMock mock, List<IParcelDeliveryCostRule> ruleSets = null) {
          if (ruleSets != null) {

@@ -16,9 +16,13 @@ namespace Plain.Courier.Core.Delivery.Services {
          var output = new DeliveryTotal();
          orders?.ForEach(order => {
             order?.Parcels.ForEach(parcel => {
+               var parcelSummary = new ParcelDeliverySummary();
+
                _rules?.ForEach(rule => {
-                  output = output.AddParcelSummary(rule.GetCost(order, parcel));
+                  parcelSummary = parcelSummary.Update(rule.GetCost(order, parcel));
                });
+
+               output = output.AddParcelSummary(parcelSummary);
             });
          });
 

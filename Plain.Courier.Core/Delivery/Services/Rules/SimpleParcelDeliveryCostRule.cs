@@ -20,7 +20,7 @@ namespace Plain.Courier.Core.Delivery.Services.Rules {
       public ParcelDeliverySummary GetCost(Order order, Parcel parcel) {
          var parcelType = GetParcelType(parcel);
          return new ParcelDeliverySummary() {
-            BasicDeliveryPrice = _prices[parcelType],
+            Price = _prices[parcelType],
             ParcelSize = parcelType
          };
       }
