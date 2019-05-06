@@ -21,7 +21,7 @@ namespace Plain.Courier.Core.Tests.Delivery {
 
       [Test]
       public void DeliveryForOrder_WithSimpleSetOfRules_OK() {
-         var orders = GetOrders_OneOfEach();
+         var orders = GetOrderWithOneOfEach();
 
          var mock = GetMock();
          var service = mock
@@ -38,8 +38,8 @@ namespace Plain.Courier.Core.Tests.Delivery {
       [Test]
       public void DeliveryForOrder_WithSpeedySetOfRules_OK() {
          var orders = new List<Order>();
-         orders.AddRange(GetOrders_OneOfEach());
-         orders.AddRange(GetOrders_OneOfEach(isSpeedy: true));
+         orders.AddRange(GetOrderWithOneOfEach());
+         orders.AddRange(GetOrderWithOneOfEach(isSpeedy: true));
 
          var mock = GetMock();
          var service = mock
@@ -53,6 +53,26 @@ namespace Plain.Courier.Core.Tests.Delivery {
          Assert.IsTrue(result.Total == 153);
          Assert.IsTrue(result.ParcelSummary.Count == 8);
          Assert.IsTrue(result.SpeedyDeliveries.Count == 4);
+      }
+
+      [Test]
+      public void DeliveryForOrder_WithWeightSetOfRules_OK() {
+         var orders = new List<Order>();
+         orders.AddRange(GetOrderWithOneOfEachAndWeightExcess());
+         orders.AddRange(GetOrderWithOneOfEachAndWeightExcess(isSpeedy: true));
+
+         var mock = GetMock();
+         var service = mock
+               .SetupRules(CreateWeigthParcelRuleSet(mock))
+            .Create<DeliveryCostsService>();
+
+         var result = service.ComputeCost(orders);
+
+         // normal order: small + med + large + xl ( 3+8+15+25 = 51)
+         // + 4 * 4 (all parcels ar by definition in excess of 2 kg , thus an extra 4$
+         // total 51 + 16 = 67
+         // one normal setup + 2x (as the 2n one is speedy) => 67*3;
+         Assert.IsTrue(result.Total == 67 * 3);
       }
    }
 }
