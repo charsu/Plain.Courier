@@ -13,16 +13,28 @@ namespace Plain.Courier.Core.Delivery.Services.Rules {
          [Small] = 1,
          [Medium] = 3,
          [Large] = 6,
-         [XL] = 10
+         [XL] = 10,
+         [Heavy] = 50
       };
 
-      public const decimal ExcessPriceCost = 2;
+      public const decimal NormalExcessPriceCost = 2;
+      public const decimal HeavyExcessPriceCost = 1;
+
+      private readonly Dictionary<ParcelSize, decimal> _excessPriceCost = new Dictionary<ParcelSize, decimal>() {
+         [Unknown] = 0,
+         [Small] = NormalExcessPriceCost,
+         [Medium] = NormalExcessPriceCost,
+         [Large] = NormalExcessPriceCost,
+         [XL] = NormalExcessPriceCost,
+         [Heavy] = HeavyExcessPriceCost
+      };
 
       public ParcelDeliverySummary GetCost(Order order, Parcel parcel) {
          var type = GetParcelType(parcel);
          var limit = _weigthLimits[type];
          var excessWeight = (parcel?.Weight ?? 0) - limit;
-         var extraCost = excessWeight > 0 ? (decimal?)(excessWeight * ExcessPriceCost) : null;
+         var excessPricePerKg = _excessPriceCost[type];
+         var extraCost = excessWeight > 0 ? (decimal?)(excessWeight * excessPricePerKg) : null;
          return new ParcelDeliverySummary() {
             Price = extraCost
          };

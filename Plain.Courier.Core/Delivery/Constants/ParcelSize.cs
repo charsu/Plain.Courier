@@ -8,6 +8,7 @@ namespace Plain.Courier.Core.Delivery.Constants {
       Small,
       Medium,
       Large,
-      XL
+      XL,
+      Heavy
    }
 }

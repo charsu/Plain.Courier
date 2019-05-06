@@ -11,6 +11,11 @@ namespace Plain.Courier.Core.Delivery.Services.Rules {
       internal ParcelSize GetParcelType(Parcel parcel) {
          // not a nice way to handle as we evaluate the collection way to many times ,but for the sake of the exercise 
          // is considered to be accepted 
+         if ((parcel?.Weight ?? 0) >= 50) {
+            // doesn't matter the dimension ... Weight rules them all. 
+            return Heavy;
+         }
+
          if (parcel?.Dimensions?.All(x => x < 10) ?? false) {
             return Small;
          }
