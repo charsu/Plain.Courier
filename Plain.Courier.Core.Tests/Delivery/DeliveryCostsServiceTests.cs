@@ -68,11 +68,11 @@ namespace Plain.Courier.Core.Tests.Delivery {
 
          var result = service.ComputeCost(orders);
 
-         // normal order: small + med + large + xl ( 3+8+15+25 = 51)
-         // + 4 * 4 (all parcels ar by definition in excess of 2 kg , thus an extra 4$
-         // total 51 + 16 = 67
-         // one normal setup + 2x (as the 2n one is speedy) => 67*3;
-         Assert.IsTrue(result.Total == 67 * 3);
+         // normal order: small + med + large + xl + heavy ( 3+8+15+25+50 = 101)
+         // + 4 * 5 - 2 (all parcels ar by definition in excess of 2 kg , thus an extra 4$
+         // total 101 + 18 = 119 
+         // one normal setup + 2x (as the 2n one is speedy) => 119*3;
+         Assert.IsTrue(result.Total == 119 * 3);
       }
    }
 }

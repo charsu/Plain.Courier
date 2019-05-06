@@ -51,6 +51,10 @@ namespace Plain.Courier.Core.Tests.Delivery {
                // xl + 2kg weight excess
                new Parcel() {
                   Width = 100, Height = 60 , Length = 3, Weight = 12
+               },
+               // heavy weight + 2kg weight excess
+               new Parcel() {
+                  Width = 100, Height = 60 , Length = 3, Weight = 52
                }
             }
          }
