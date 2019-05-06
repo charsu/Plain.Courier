@@ -6,9 +6,10 @@ using Plain.Courier.Core.Delivery.Services.Rules;
 
 namespace Plain.Courier.Core.Tests.Delivery {
    public static class DeliveryCostsServiceHelper {
-      public static List<Order> GetOrders_OneOfEach()
+      public static List<Order> GetOrders_OneOfEach(bool isSpeedy = false)
          => new List<Order>() {
          new Order() {
+            IsSpeedyDelivery = isSpeedy,
             Parcels = new List<Parcel>(){
                // small
                new Parcel() {
@@ -32,6 +33,12 @@ namespace Plain.Courier.Core.Tests.Delivery {
 
       public static List<IParcelDeliveryCostRule> CreateSimpleParcelRuleSet(AutoMock mock)
          => new List<IParcelDeliveryCostRule>() { mock.Create<SimpleParcelDeliveryCostRule>() };
+
+      public static List<IParcelDeliveryCostRule> CreateSpeedyParcelRuleSet(AutoMock mock)
+         => new List<IParcelDeliveryCostRule>() {
+            mock.Create<SimpleParcelDeliveryCostRule>(),
+            mock.Create<SpeedyParcelDeliveryCostRule>()
+         };
 
       public static AutoMock SetupRules(this AutoMock mock, List<IParcelDeliveryCostRule> ruleSets = null) {
          if (ruleSets != null) {
