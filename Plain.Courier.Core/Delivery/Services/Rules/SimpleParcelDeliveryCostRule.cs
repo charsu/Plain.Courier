@@ -17,12 +17,13 @@ namespace Plain.Courier.Core.Delivery.Services.Rules {
          [XL] = 25
       };
 
-
-
-      public DeliveryTotal GetCost(Order order, Parcel parcel)
-         => new DeliveryTotal() {
-            Total = _prices[GetParcelType(parcel)]
+      public ParcelDeliverySummary GetCost(Order order, Parcel parcel) {
+         var parcelType = GetParcelType(parcel);
+         return new ParcelDeliverySummary() {
+            Price = _prices[parcelType],
+            ParcelSize = parcelType
          };
+      }
 
       private ParcelSize GetParcelType(Parcel parcel) {
          // not a nice way to handle as we evaluate the collection way to many times ,but for the sake of the exercise 

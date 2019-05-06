@@ -5,14 +5,17 @@ using System.Text;
 namespace Plain.Courier.Core.Delivery.Models {
    public class DeliveryTotal {
       public decimal Total { get; set; }
+      public List<ParcelDeliverySummary> ParcelSummary { get; set; } = new List<ParcelDeliverySummary>();
+   }
 
-      public static DeliveryTotal operator +(DeliveryTotal left, DeliveryTotal right) {
-         var ltotal = left?.Total ?? 0;
-         var rtotal = right?.Total ?? 0;
+   public static class DeliveryTotalHelper {
+      public static DeliveryTotal AddParcelSummary(this DeliveryTotal dt, ParcelDeliverySummary parcelDeliverySummary) {
+         if (parcelDeliverySummary != null) {
+            dt.ParcelSummary.Add(parcelDeliverySummary);
+            dt.Total += parcelDeliverySummary.Price;
+         }
 
-         return new DeliveryTotal() {
-            Total = ltotal + rtotal
-         };
+         return dt;
       }
    }
 }

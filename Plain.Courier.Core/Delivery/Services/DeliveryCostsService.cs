@@ -17,7 +17,7 @@ namespace Plain.Courier.Core.Delivery.Services {
          orders?.ForEach(order => {
             order?.Parcels.ForEach(parcel => {
                _rules?.ForEach(rule => {
-                  output += rule.GetCost(order, parcel);
+                  output = output.AddParcelSummary(rule.GetCost(order, parcel));
                });
             });
          });
